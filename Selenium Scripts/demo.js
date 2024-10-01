@@ -3,6 +3,8 @@ const { error } = require('selenium-webdriver');
 const { Select } = require('selenium-webdriver');
 const { Builder, By, Key, until } = require('selenium-webdriver');
 const { FetchError } = require('selenium-webdriver/bidi/networkTypes');
+const edge = require('selenium-webdriver/edge'); // Import Edge options
+
 
 // Custom sleep function
 function sleep(ms) {
@@ -23,10 +25,14 @@ function formatDateToString(date) {
 }
 
 (async function example() {
+    let options = new edge.Options();
+    options.addArguments('--window-size=1920,1080'); // Set window size for headless
+    
     // Create a new browser session (here, it's Chrome, but you can change to Firefox, etc.)
     let driver = await new Builder()
     .forBrowser('MicrosoftEdge')
-    .setEdgeService(new (require('selenium-webdriver/edge').ServiceBuilder)('C:/Users/apcoelho/Downloads/edgedriver_win64/msedgedriver.exe')) // replace with your actual path to the Edge WebDriver
+    .setEdgeOptions(options)
+    .setEdgeService(new (require('selenium-webdriver/edge').ServiceBuilder)('../edgedriver_win64/msedgedriver.exe')) // replace with your actual path to the Edge WebDriver
     .build();
     try {
         
@@ -137,6 +143,8 @@ function formatDateToString(date) {
         let next_button = await driver.wait(until.elementLocated(By.xpath('//*[@id="nextsendquote"]')),10000);
         await driver.wait(until.elementIsVisible(next_button),10000).click();
 
+
+
         //QUOTE FORM
 
         //email input
@@ -169,7 +177,7 @@ function formatDateToString(date) {
         }
       
         console.log('\x1b[42m', "Test sucessfull",'\x1b[0m');
-        
+
     } catch(err){
       console.log('\x1b[31m',"Error: " + err,'\x1b[0m');
 
